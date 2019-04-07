@@ -1,2 +1,2 @@
-web: gunicorn app:co
+web: gunicorn co:app
 release: flask db upgrade
