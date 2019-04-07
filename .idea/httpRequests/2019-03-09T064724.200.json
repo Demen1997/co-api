@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "ads",
+    "currency": "USD: US Dollar",
+    "annual_income_percentage": 2
+  },
+  {
+    "id": 2,
+    "name": "Salary",
+    "currency": "USD: US Dollar",
+    "annual_income_percentage": 8
+  },
+  {
+    "id": 3,
+    "name": "Salary2",
+    "currency": "USD: US Dollar",
+    "annual_income_percentage": 10
+  }
+]
