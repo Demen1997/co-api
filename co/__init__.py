@@ -9,29 +9,6 @@ from co.models import db, User
 from co.resources.auth import UserRegistration, UserLogin, TokenRefresh
 from co.resources.main import Currencies, Balances, Transactions, Budgets, BudgetExpend
 
-migrate = Migrate()
-api = Api()
-jwt = JWTManager()
-
-
-def create_app(conf=None):
-    app = Flask(__name__, instance_relative_config=True)
-    app.config.from_object(Config)
-    if conf is not None:
-        app.config.from_object(conf)
-
-    migrate.init_app(app, db)
-    db.init_app(app)
-
-    add_resources(api)
-
-    # noinspection PyTypeChecker
-    api.init_app(app)
-    jwt.init_app(app)
-    CORS(app)
-
-    return app
-
 
 def add_resources(a):
     a.add_resource(UserRegistration, '/auth/register')
@@ -42,3 +19,19 @@ def add_resources(a):
     a.add_resource(Transactions, '/main/transactions')
     a.add_resource(BudgetExpend, '/main/transactions/expandBudget')
     a.add_resource(Budgets, '/main/budgets')
+
+
+migrate = Migrate()
+api = Api()
+jwt = JWTManager()
+app = Flask(__name__, instance_relative_config=True)
+app.config.from_object(Config)
+migrate.init_app(app, db)
+db.init_app(app)
+
+add_resources(api)
+
+# noinspection PyTypeChecker
+api.init_app(app)
+jwt.init_app(app)
+CORS(app)

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="04b87650-6cf4-4670-aaf4-14d4e12bbd92" name="Default Changelist" comment="" />
+    <list default="true" id="04b87650-6cf4-4670-aaf4-14d4e12bbd92" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/co/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/co/__init__.py" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/.idea/httpRequests/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -72,8 +74,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/co/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="714">
-              <caret line="42" column="29" selection-start-line="42" selection-start-column="29" selection-end-line="42" selection-end-column="29" />
+            <state relative-caret-position="204">
+              <caret line="12" selection-start-line="12" selection-end-line="12" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -153,10 +155,10 @@
         <option value="$PROJECT_DIR$/co/main.py" />
         <option value="$PROJECT_DIR$/co/resources/auth.py" />
         <option value="$PROJECT_DIR$/co/resources/response_util.py" />
-        <option value="$PROJECT_DIR$/co/__init__.py" />
         <option value="$PROJECT_DIR$/co/models.py" />
         <option value="$PROJECT_DIR$/co/resources/serializer_utils.py" />
         <option value="$PROJECT_DIR$/co/resources/main.py" />
+        <option value="$PROJECT_DIR$/co/__init__.py" />
       </list>
     </option>
   </component>
@@ -585,12 +587,12 @@
       <workItem from="1552057062176" duration="16574000" />
       <workItem from="1552665369944" duration="6000" />
       <workItem from="1554402109868" duration="885000" />
-      <workItem from="1554480515141" duration="21476000" />
+      <workItem from="1554480515141" duration="21869000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="88475000" />
+    <option name="totallyTimeSpent" value="88868000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
@@ -871,8 +873,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/co/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="42" column="29" selection-start-line="42" selection-start-column="29" selection-end-line="42" selection-end-column="29" />
+        <state relative-caret-position="204">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
