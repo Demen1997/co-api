@@ -1,7 +1,5 @@
 from functools import reduce
 
-from co.models import Budget
-
 
 def serialize_balances(balances):
     return [serialize_balance(b) for b in balances]

@@ -1,3 +1,4 @@
+import time
 from functools import reduce
 
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -12,7 +13,6 @@ import co.resources.response_util as resp_util
 
 def validate_balance_request(request):
     return request['name'].strip() \
-           and request['annualIncomePercentage'] >= 0 \
            and request['currency'].strip()
 
 
@@ -73,7 +73,6 @@ class Balances(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('name', required=True)
-        parser.add_argument('annualIncomePercentage', required=True, type=int)
         parser.add_argument('currency', required=True)
 
         data = parser.parse_args()
@@ -83,7 +82,7 @@ class Balances(Resource):
         Balance(
             user_id=get_jwt_identity(),
             name=data['name'],
-            annual_income_percentage=data['annualIncomePercentage'],
+            annual_income_percentage=0,
             currency=data['currency']
         ).save_to_db()
 
@@ -268,3 +267,34 @@ class BudgetExpend(Resource):
             datetime=datetime.now(),
             description=request['description']
         ).save_to_db()
+
+    @jwt_required
+    def get(self):
+        request = reqparse.RequestParser() \
+            .add_argument('dateFrom', type=int, required=True) \
+            .add_argument('dateTo', type=int, required=True) \
+            .parse_args()
+
+        balances = User.find_by_id(get_jwt_identity()).balances
+
+        def fold(b: Budget):
+            income = 0
+            outcome = 0
+            for t in b.transactions:
+                transaction_unix = int(time.mktime(t.datetime.timetuple()))
+                if not request['dateFrom'] < transaction_unix < request['dateTo']:
+                    continue
+
+                if t.amount >= 0:
+                    income += t.amount
+                else:
+                    outcome += abs(t.amount)
+
+            return {
+                'name': b.name,
+                'currency': b.currency,
+                'income': float(income),
+                'outcome': float(outcome),
+            }
+
+        return list(map(fold, balances))

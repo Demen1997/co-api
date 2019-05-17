@@ -9,7 +9,7 @@ db = SQLAlchemy()
 currencies = [
     Currency.usd,
     Currency.rub,
-    Currency.gbp
+    Currency.eur
 ]
 
 
@@ -105,6 +105,8 @@ class Budget(db.Model):
     # ISO 4217
     currency = db.Column(db.String(3), nullable=False)
 
+    transactions = db.relationship('Transaction', backref='budget', lazy=True)
+
     @classmethod
     def delete(cls, id):
         cls.query.filter_by(id=id).delete()
@@ -130,7 +132,8 @@ class Budget(db.Model):
 class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     balance_id = db.Column(db.Integer, db.ForeignKey('balance.id'))
-    budget_id = db.Column(db.Integer, nullable=True)
+    budget_id = db.Column(db.Integer, db.ForeignKey('budget.id'))
+
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     amount = db.Column(db.Numeric, nullable=False)
     datetime = db.Column(db.DateTime, nullable=False)
