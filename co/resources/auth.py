@@ -9,7 +9,7 @@ from co import User
 class TokenRefresh(Resource):
     @jwt_refresh_token_required
     def post(self):
-        access_token = create_access_token(identity=get_jwt_identity())
+        access_token = create_access_token(identity=get_jwt_identity(), expires_delta=False)
         return {'accessToken': access_token}
 
 
