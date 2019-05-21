@@ -7,7 +7,7 @@ from flask_restful import Api
 from co.config import Config
 from co.models import db, User
 from co.resources.auth import UserRegistration, UserLogin, TokenRefresh
-from co.resources.main import Currencies, Balances, Transactions, Budgets, BudgetExpend
+from co.resources.main import Currencies, Balances, Transactions, Budgets, BudgetExpend, Goals, GoalFulfill
 
 
 def add_resources(a):
@@ -19,6 +19,8 @@ def add_resources(a):
     a.add_resource(Transactions, '/main/transactions')
     a.add_resource(BudgetExpend, '/main/transactions/expandBudget')
     a.add_resource(Budgets, '/main/budgets')
+    a.add_resource(Goals, '/main/goals')
+    a.add_resource(GoalFulfill, '/main/transactions/fulfillGoal')
 
 
 migrate = Migrate()

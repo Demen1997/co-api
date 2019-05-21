@@ -1,3 +1,4 @@
+import datetime
 import re
 
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_refresh_token_required, get_jwt_identity
@@ -9,7 +10,8 @@ from co import User
 class TokenRefresh(Resource):
     @jwt_refresh_token_required
     def post(self):
-        access_token = create_access_token(identity=get_jwt_identity(), expires_delta=False)
+        expires = datetime.timedelta(days=365)
+        access_token = create_access_token(identity=get_jwt_identity(), expires_delta=expires)
         return {'accessToken': access_token}
 
 

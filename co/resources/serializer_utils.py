@@ -49,3 +49,14 @@ def serialize_budget(budget, current_amount):
         'relAmount': float(current_amount / float(budget.initial_amount) * 100),
         'currency': budget.currency
     }
+
+
+def serialize_goal(target, current_amount):
+    return {
+        'id': target.id,
+        'name': target.name,
+        'currentAmount': current_amount,
+        'initialAmount': float(target.initial_amount),
+        'currency': target.currency,
+        'isDeletable': target.is_deletable(current_amount)
+    }

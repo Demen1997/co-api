@@ -21,6 +21,7 @@ class User(UserMixin, db.Model):
 
     balances = db.relationship('Balance', backref='user', lazy=True)
     budgets = db.relationship('Budget', backref='user', lazy=True)
+    goals = db.relationship('Goal', backref='user', lazy=True)
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -54,6 +55,8 @@ class Balance(db.Model):
     name = db.Column(db.String(64), nullable=False)
     annual_income_percentage = db.Column(db.Integer, default=0)
 
+    system = db.Column(db.Boolean, nullable=False, default=False)
+
     transactions = db.relationship('Transaction', backref='balance', lazy=True)
 
     @classmethod
@@ -69,7 +72,7 @@ class Balance(db.Model):
     def actual_balance(cls, id):
         balance = cls.query.filter_by(id=id).first()
         amounts = list(map(lambda t: t.amount, balance.transactions))
-        return float(reduce(lambda x, y: x + y, amounts))
+        return float(reduce(lambda x, y: x + y, amounts, 0))
 
     @classmethod
     def delete(cls, id):
@@ -79,21 +82,14 @@ class Balance(db.Model):
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
+        db.session.flush()
+        return self.id
 
     def update(self):
         db.session.commit()
 
     def __repr__(self) -> str:
         return '<Balance: {}>'.format(self.id)
-
-
-class Goal(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-    # ISO 4217
-    currency = db.Column(db.String(3), nullable=False)
-    name = db.Column(db.String(64), nullable=False)
 
 
 class Budget(db.Model):
@@ -129,6 +125,45 @@ class Budget(db.Model):
         db.session.commit()
 
 
+class Goal(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    initial_amount = db.Column(db.Numeric, nullable=False)
+    balance_id = db.Column(db.Integer, db.ForeignKey('balance.id'))
+    name = db.Column(db.String(64))
+    currency = db.Column(db.String(3), nullable=False)
+
+    @classmethod
+    def find_by_user_id(cls, user_id, id=None):
+        return cls.query.filter_by(user_id=user_id, id=id).first() if id \
+            else cls.query.filter_by(user_id=user_id, id=id).all()
+
+    @classmethod
+    def find_by_id(cls, id):
+        return cls.query.filter_by(id=id).first()
+
+    @classmethod
+    def delete(cls, id):
+        goal = cls.query.filter_by(id=id).first()
+        if goal.is_deletable():
+            cls.query.filter_by(id=id).delete()
+            db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def is_deletable(self, current_amount=None):
+        if current_amount is None:
+            current_amount = Balance.actual_balance(self.balance_id)
+
+        return current_amount == 0 or current_amount >= self.initial_amount
+
+
+
 class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     balance_id = db.Column(db.Integer, db.ForeignKey('balance.id'))
@@ -158,6 +193,13 @@ class Transaction(db.Model):
 
     def save_to_db(self):
         db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def save_to_db_in_session(cls, *transactions):
+        for transaction in transactions:
+            db.session.add(transaction)
+
         db.session.commit()
 
     def update(self):
